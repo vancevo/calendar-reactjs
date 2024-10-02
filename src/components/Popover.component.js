@@ -1,14 +1,25 @@
 import React from "react";
-import "./index.css";
-import { Popover, Space } from "antd";
-export function PopoverEvent({ children, content, trigger }) {
+import { Modal } from "antd";
+import {
+  maxWidthPopupSelection
+} from "../lib/constants"
+export function PopoverEvent({ visible, onClose, top, left, children }) {
   return (
-    <>
-      <Space wrap>
-        <Popover content={content} trigger={trigger}>
-          {children}
-        </Popover>
-      </Space>
-    </>
+    <Modal
+      visible={visible}
+      onCancel={onClose}
+      mask={false}
+      closable={false}
+      footer={null}
+      className="transition ease-in-out"
+      style={{
+        maxWidth: `${maxWidthPopupSelection}px`,
+        top: top,
+        left: left,
+        position: "absolute"
+      }}
+    >
+      <p>{children}</p>
+    </Modal>
   );
 }

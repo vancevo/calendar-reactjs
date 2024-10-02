@@ -10,10 +10,16 @@ import {
   currentWeek,
   endDayWeek,
   startDayWeek,
-  DateViewOption,
   CalendarViewOption,
+  EnumDateViewOption,
+  maxHeightPopupSelection,
+  maxWidthPopupSelection,
+  initialEvents,
+  eventActionText,
+  initialHeaderToolbar
 } from "./lib/constants";
-import { DatePicker, Select } from "antd";
+import { DatePicker, Select, Modal } from "antd";
+import { PopoverEvent } from "./components/Popover.component";
 import { getRandomColor } from "./lib/utils";
 
 const { RangePicker } = DatePicker;
@@ -24,23 +30,37 @@ function App() {
   const [title, setTitle] = useState(currentWeek);
   const [startDay, setStartDay] = useState(startDayWeek);
   const [endDay, setEndDay] = useState(endDayWeek);
+  // popup
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupContent, setPopupContent] = useState("Nội dung hiển thị");
+  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
   function handleDateSelect(selectInfo) {
-    // let title = prompt("Please enter a new title for your event");
-    let calendarApi = selectInfo.view.calendar;
-    const colorRandom = getRandomColor();
-    calendarApi.unselect();
-    if (title) {
-      calendarApi.addEvent({
-        id: 1,
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        backgroundColor: colorRandom,
-        allDay: selectInfo.allDay,
-      });
-    }
+    // let calendarApi = selectInfo.view.calendar;
+    // const colorRandom = getRandomColor();
+    // calendarApi.unselect();
+    // if (title) {
+    //   calendarApi.addEvent({
+    //     id: 1,
+    //     title,
+    //     start: selectInfo.startStr,
+    //     end: selectInfo.endStr,
+    //     backgroundColor: colorRandom,
+    //     allDay: selectInfo.allDay,
+    //   });
+    // }
+    const { jsEvent } = selectInfo;
+    setPopupPosition({
+      top: `${jsEvent.clientY - maxHeightPopupSelection}px`, // Sử dụng clientY cho vị trí dọc
+      left: `${jsEvent.clientX - maxHeightPopupSelection}px`, // Sử dụng clientX cho vị trí ngang
+    });
+
+    setPopupVisible(true); // Hiện popup
   }
+
+  const handlePopupClose = () => {
+    setPopupVisible(false);
+  };
 
   function handleEventClick(clickInfo) {
     // if (
@@ -54,13 +74,6 @@ function App() {
 
   function handleEvents(events) {
     setCurrentEvents(events);
-  }
-
-  function handleDatesSet(dateInfo) {
-    const startOfWeek = dayjs(dateInfo.start).format("MMM D");
-    const endOfWeek = dayjs(dateInfo.end).format("MMM D, YYYY");
-    const fullOfWeek = `${startOfWeek} - ${endOfWeek}`;
-    setTitle(fullOfWeek);
   }
 
   const handleRangeChange = (dates) => {
@@ -85,15 +98,15 @@ function App() {
   }
   function goMonth() {
     const calendarApi = calendarRef.current.getApi();
-    calendarApi.changeView(CalendarViewOption[DateViewOption["month"]]);
+    calendarApi.changeView(CalendarViewOption[EnumDateViewOption["month"]]);
   }
   function goDay() {
     const calendarApi = calendarRef.current.getApi();
-    calendarApi.changeView(CalendarViewOption[DateViewOption["day"]]);
+    calendarApi.changeView(CalendarViewOption[EnumDateViewOption["day"]]);
   }
   function goWeek() {
     const calendarApi = calendarRef.current.getApi();
-    calendarApi.changeView(CalendarViewOption[DateViewOption["week"]]);
+    calendarApi.changeView(CalendarViewOption[EnumDateViewOption["week"]]);
   }
 
   const handleChange = (value) => {
@@ -165,11 +178,7 @@ function App() {
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          headerToolbar={{
-            start: "",
-            center: "",
-            end: "",
-          }}
+          headerToolbar={initialHeaderToolbar}
           initialView="timeGridWeek"
           editable={true}
           selectable={true}
@@ -177,20 +186,7 @@ function App() {
           dayMaxEvents={true}
           slotEventOverlap={true}
           nowIndicator={true}
-          initialEvents={[
-            {
-              id: "event 1",
-              title: "event 1",
-              start: "2024-10-01T10:00:00",
-              end: "2024-10-01T12:00:00",
-            },
-            {
-              id: "event 2",
-              title: "event 2",
-              start: "2024-10-02T14:00:00",
-              end: "2024-10-02T15:30:00",
-            },
-          ]}
+          initialEvents={initialEvents}
           select={(e) => {
             console.log(e);
             return handleDateSelect(e);
@@ -198,8 +194,31 @@ function App() {
           eventContent={renderEventContent}
           eventClick={handleEventClick}
           eventsSet={handleEvents}
-          datesSet={handleDatesSet} // Add the datesSet handler
         />
+        <PopoverEvent
+          visible={popupVisible}
+          onClose={handlePopupClose}
+          content={popupContent}
+          top={popupPosition.top}
+          left={popupPosition.left}
+        >
+          <div>
+            {Object.entries(eventActionText).map(([key, value]) => (
+              <p
+                key={key}
+                id={key}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log(key);
+                  setPopupVisible(false);
+                }}
+                className="p-2 hover:bg-neutral-300 cursor-pointer"
+              >
+                {value}
+              </p>
+            ))}
+          </div>
+        </PopoverEvent>
       </div>
     </div>
   );
