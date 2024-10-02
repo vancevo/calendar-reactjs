@@ -1,10 +1,11 @@
 import dayjs from "dayjs";
 
+export const defaultViewMode = "week";
 export const currentWeek = `${dayjs()
   .startOf("week")
   .format("MMM D")} - ${dayjs().endOf("week").format("MMM D, YYYY")}`;
-export const startDayWeek = dayjs().startOf("week");
-export const endDayWeek = dayjs().endOf("week");
+export const startWeek = dayjs().startOf("week");
+export const endWeek = dayjs().endOf("week");
 
 export const initialEvents = [
   {
@@ -20,28 +21,30 @@ export const initialEvents = [
     end: "2024-10-02T15:30:00",
   },
 ];
-
 export const initialHeaderToolbar = {
   start: "",
   center: "",
   end: "",
-}
+};
 export const EnumDateViewOption = {
   day: "Day",
   week: "Week",
   month: "Month",
 };
+export const datedOptions = Object.entries(EnumDateViewOption).map(
+  // {value: 'day', label: 'Day'}
+  ([key, value]) => ({ value: key, label: value })
+);
 export const CalendarViewOption = {
-  [EnumDateViewOption["day"]]: "timeGridDay",
-  [EnumDateViewOption["week"]]: "timeGridWeek",
-  [EnumDateViewOption["month"]]: "dayGridMonth",
+  day: "timeGridDay",
+  week: "timeGridWeek",
+  month: "dayGridMonth",
 };
-
 export const eventActionText = {
   addCustom: "Add Custom Event",
   addTimeoff: "Add Time Off",
   newjob: "New Job",
 };
-
 export const maxWidthPopupSelection = 200;
-export const maxHeightPopupSelection = 110 + 20 * Object.keys(eventActionText).length; // 20 is height for each items
+export const maxHeightPopupSelection =
+  110 + 20 * Object.keys(eventActionText).length; // 20 is height for each items
