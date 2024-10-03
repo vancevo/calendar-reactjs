@@ -3,10 +3,9 @@ import "./index.css";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import {
-  currentWeek,
   endWeek,
   startWeek,
   CalendarViewOption,
@@ -22,40 +21,41 @@ import { getRandomColor, generatedId } from "./lib/utils";
 import { RangePickerDate } from "./components/RangePicker.component";
 import { Sidebar } from "./components/Sidebar.component";
 import { useCalendarContext } from "./CalendarContext";
-import { goCalendarAPI } from "./lib/calendarConstant";
+import { goCalendarAPI, crudCalendarAPI } from "./lib/calendarConstant";
 
 function App() {
   const { calendarRef, dateRef, isDraggableInitialized } = useCalendarContext();
-  const [events, setEvents] = useState(initialEvents);
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
-  const [test, setTest] = useState(null);
 
-  const handleDateSelect = (selectInfo) => {
-    const views = Object.values(CalendarViewOption).filter(
-      (view) => view !== CalendarViewOption["month"]
-    );
-    const currentView = goCalendarAPI({ calendarRef }).view();
+  const handleDateSelect = useCallback(
+    (selectInfo) => {
+      const views = Object.values(CalendarViewOption).filter(
+        (view) => view !== CalendarViewOption["month"]
+      );
+      const currentView = goCalendarAPI({ calendarRef }).view();
 
-    if (!views.includes(currentView)) {
-      return;
-    }
+      if (!views.includes(currentView)) {
+        return;
+      }
 
-    dateRef.current.start = selectInfo.startStr;
-    dateRef.current.end = selectInfo.endStr;
-    const { jsEvent } = selectInfo;
-    setPopupPosition({
-      top: `${jsEvent.clientY - maxHeightPopupSelection}px`,
-      left: `${jsEvent.clientX - maxHeightPopupSelection}px`,
-    });
-    setPopupVisible(true);
-  };
+      dateRef.current.start = selectInfo.startStr;
+      dateRef.current.end = selectInfo.endStr;
+      const { jsEvent } = selectInfo;
+      setPopupPosition({
+        top: `${jsEvent.clientY - maxHeightPopupSelection}px`,
+        left: `${jsEvent.clientX - maxHeightPopupSelection}px`,
+      });
+      setPopupVisible(true);
+    },
+    [calendarRef, dateRef]
+  );
 
-  const handlePopupClose = () => {
+  const handlePopupClose = useCallback(() => {
     setPopupVisible(false);
-  };
+  }, []);
 
-  const generatedEvent = () => {
+  const generatedEvent = useCallback(() => {
     const title = prompt("Enter task title");
     const startTime = dateRef.current.start;
     const endTime = dateRef.current.end;
@@ -68,21 +68,25 @@ function App() {
         bgColor: getRandomColor(),
         allDay: false,
       };
-      setEvents((prev) => [...prev, newEvent]);
+      crudCalendarAPI({ calendarRef, data: newEvent }).add();
     }
-  };
-  const handleEventPopover = (type) => {
-    switch (type) {
-      case "addTimeoff":
-        generatedEvent();
-        break;
-      default:
-        console.log(type);
-        break;
-    }
-  };
+  }, []);
 
-  function handleEventClick(clickInfo) {
+  const handleEventPopover = useCallback(
+    (type) => {
+      switch (type) {
+        case "addTimeoff":
+          generatedEvent();
+          break;
+        default:
+          console.log(type);
+          break;
+      }
+    },
+    [generatedEvent]
+  );
+
+  const handleEventClick = useCallback((clickInfo) => {
     if (
       window.confirm(
         `Are you sure you want to delete the event '${clickInfo.event.title}'`
@@ -90,11 +94,7 @@ function App() {
     ) {
       clickInfo.event.remove();
     }
-  }
-
-  useEffect(() => {
-    console.log(test);
-  }, [test]);
+  }, []);
 
   useEffect(() => {
     const containerEl = document.querySelector("#external-events");
@@ -102,7 +102,6 @@ function App() {
       new Draggable(containerEl, {
         itemSelector: ".event-items",
         eventData: (ev) => {
-          setTest({ ev });
           return {
             title: ev.innerText,
           };
@@ -133,7 +132,7 @@ function App() {
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           headerToolbar={initialHeaderToolbar}
           initialView={CalendarViewOption.week}
-          initialEvents={events}
+          initialEvents={initialEvents}
           select={handleDateSelect}
           eventClick={handleEventClick}
           editable

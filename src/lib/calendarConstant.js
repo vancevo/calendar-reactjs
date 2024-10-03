@@ -18,5 +18,14 @@ export const goCalendarAPI = ({
     goto: () =>
       startTime.length ?? calendar.gotoDate(dayjs(startTime).toISOString()),
   };
-  // return methodApi;
+};
+
+export const crudCalendarAPI = ({ calendarRef, data }) => {
+  if (!calendarRef.current) {
+    return;
+  }
+  const calendar = calendarRef?.current.getApi();
+  return {
+    add: () => calendar.addEvent(data),
+  };
 };

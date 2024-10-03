@@ -38,14 +38,14 @@ export function Sidebar() {
           {tasks?.map(({ id, title, time, bgColor }) => (
             <div
               key={id}
-              className={`w-[200px] min-h-20 border-l-500 border-l-[4px] border-neutral-500 ml-2 shadow p-2 event-items`}
+              className={`w-[200px] min-h-20 border-l-500 border-l-[4px] border-neutral-500 ml-2 shadow p-2  event-items`}
               style={{
                 backgroundColor: bgColor,
               }}
               draggable
             >
-              <p>{time}</p>
-              <p>{title}</p>
+              <p className="font-bold">{time}</p>
+              <p className="event-items">{title}</p>
             </div>
           ))}
         </div>

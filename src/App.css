@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+.fc-event-time {
+  background-color: #91b6db;
+  display: block;
+}
