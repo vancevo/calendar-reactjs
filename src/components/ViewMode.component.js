@@ -2,7 +2,6 @@ import { Select } from "antd";
 import { CalendarViewOption, DatedOptions } from "../lib/constants";
 import { useCalendarContext } from "../CalendarContext";
 import { goCalendarAPI } from "../lib/calendarConstant";
-import { useEffect } from "react";
 
 export function ViewMode({ children, defaultValue, ...props }) {
   const { calendarRef } = useCalendarContext();

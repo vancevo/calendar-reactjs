@@ -3,7 +3,7 @@ import "./index.css";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import {
   endWeek,
@@ -21,7 +21,11 @@ import { getRandomColor, generatedId } from "./lib/utils";
 import { RangePickerDate } from "./components/RangePicker.component";
 import { Sidebar } from "./components/Sidebar.component";
 import { useCalendarContext } from "./CalendarContext";
-import { goCalendarAPI, crudCalendarAPI } from "./lib/calendarConstant";
+import {
+  goCalendarAPI,
+  crudCalendarAPI,
+  renderEventContent,
+} from "./lib/calendarConstant";
 
 function App() {
   const { calendarRef, dateRef, isDraggableInitialized } = useCalendarContext();
@@ -135,6 +139,8 @@ function App() {
           initialEvents={initialEvents}
           select={handleDateSelect}
           eventClick={handleEventClick}
+          allDaySlot={false}
+          eventContent={renderEventContent}
           editable
           selectable
           dayMaxEvents
