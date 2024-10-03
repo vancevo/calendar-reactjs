@@ -7,7 +7,7 @@ export function PopoverEvent({ children, top, left, ...props }) {
     <Modal
       className="transition ease-in-out"
       style={{
-        maxWidth: `${maxWidthPopupSelection}px`,
+        maxWidth: `${props.width ?? maxWidthPopupSelection}px`,
         top: top,
         left: left,
         position: "absolute",

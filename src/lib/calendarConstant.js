@@ -29,3 +29,12 @@ export const crudCalendarAPI = ({ calendarRef, data }) => {
     add: () => calendar.addEvent(data),
   };
 };
+
+export const renderEventContent = (eventInfo) => {
+  return (
+    <div className="flex gap-2 flex-col h-[97px]">
+      <p className="bg-[#91b6db]">{eventInfo.timeText}</p>
+      <p>{eventInfo.event.title}</p>
+    </div>
+  );
+};

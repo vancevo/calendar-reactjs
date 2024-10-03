@@ -41,3 +41,7 @@
   background-color: #91b6db;
   display: block;
 }
+
+.fc-timegrid-event-harness {
+  min-height: 60px;
+}
