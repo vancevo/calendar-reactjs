@@ -1,29 +1,27 @@
 import dayjs from "dayjs";
 import { DatePicker } from "antd";
-import { useState } from "react";
-import { defaultViewMode } from "../lib/constants";
+import { useCalendarContext } from "../CalendarContext";
+import { goCalendarAPI } from "../lib/calendarConstant";
 
 const { RangePicker } = DatePicker;
 
-export function RangePickerDate({ calendarRef, start, end, ...props }) {
+export function RangePickerDate({ start, end, ...props }) {
+  const { calendarRef } = useCalendarContext();
+
   const handleRangeChange = (dates) => {
     if (dates) {
-      const calendarApi = calendarRef.current.getApi();
       const [start, end] = dates;
-      calendarApi.gotoDate(dayjs(start).toISOString());
+      goCalendarAPI({ calendarRef, startTime: start }).goto();
     }
   };
   const goNext = () => {
-    const calendarApi = calendarRef.current.getApi();
-    calendarApi.next();
+    goCalendarAPI({ calendarRef }).next();
   };
   const goPrevious = () => {
-    const calendarApi = calendarRef.current.getApi();
-    calendarApi.prev();
+    goCalendarAPI({ calendarRef }).prev();
   };
   const goToday = () => {
-    const calendarApi = calendarRef.current.getApi();
-    calendarApi.today();
+    goCalendarAPI({ calendarRef }).today();
   };
 
   return (

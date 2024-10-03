@@ -1,43 +1,28 @@
 import { Select } from "antd";
-import {
-  CalendarViewOption,
-  datedOptions,
-} from "../lib/constants";
+import { CalendarViewOption, DatedOptions } from "../lib/constants";
+import { useCalendarContext } from "../CalendarContext";
+import { goCalendarAPI } from "../lib/calendarConstant";
+import { useEffect } from "react";
 
-export function ViewMode({ children, calendarRef, defaultValue, ...props }) {
-  const goMonth = () => {
-    const calendarApi = calendarRef.current.getApi();
-    calendarApi.changeView(CalendarViewOption["month"]);
-  };
-  const goDay = () => {
-    const calendarApi = calendarRef.current.getApi();
-    calendarApi.changeView(CalendarViewOption["day"]);
-  };
-  const goWeek = () => {
-    const calendarApi = calendarRef.current.getApi();
-    calendarApi.changeView(CalendarViewOption["week"]);
-  };
+export function ViewMode({ children, defaultValue, ...props }) {
+  const { calendarRef } = useCalendarContext();
+  const views = Object.keys(CalendarViewOption);
 
   const handleChange = (type) => {
-    switch (type) {
-      case "week":
-        goWeek();
-        break;
-      case "day":
-        goDay();
-        break;
-      case "month":
-        goMonth();
-        break;
-      default:
-        break;
+    if (!views.includes(type)) {
+      return;
     }
+    goCalendarAPI({
+      calendarRef,
+      viewOption: CalendarViewOption[type],
+    }).changeView();
   };
+
   return (
     <>
       <Select
         onChange={handleChange}
-        options={datedOptions}
+        options={DatedOptions}
         className="w-[120px] h-[40px]"
         defaultValue={defaultValue.toLocaleLowerCase()}
         {...props}

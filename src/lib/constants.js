@@ -9,14 +9,14 @@ export const endWeek = dayjs().endOf("week");
 
 export const initialEvents = [
   {
-    id: "event 1",
+    id: "event-1",
     title: "event 1",
     start: "2024-10-01T10:00:00",
     end: "2024-10-01T12:00:00",
     bgColor: "#fff",
   },
   {
-    id: "event 2",
+    id: "event-2",
     title: "event 2",
     start: "2024-10-02T14:00:00",
     end: "2024-10-02T15:30:00",
@@ -33,7 +33,7 @@ export const EnumDateViewOption = {
   week: "Week",
   month: "Month",
 };
-export const datedOptions = Object.entries(EnumDateViewOption).map(
+export const DatedOptions = Object.entries(EnumDateViewOption).map(
   // {value: 'day', label: 'Day'}
   ([key, value]) => ({ value: key, label: value })
 );
@@ -42,11 +42,11 @@ export const CalendarViewOption = {
   week: "timeGridWeek",
   month: "dayGridMonth",
 };
-export const eventActionText = {
+export const EventActionText = {
   addCustom: "Add Custom Event",
   addTimeoff: "Add Time Off",
   newjob: "New Job",
 };
 export const maxWidthPopupSelection = 200;
 export const maxHeightPopupSelection =
-  110 + 20 * Object.keys(eventActionText).length; // 20 is height for each items
+  110 + 20 * Object.keys(EventActionText).length; // 20 is height for each items

@@ -14,7 +14,7 @@ export function PopoverEvent({ children, top, left, ...props }) {
       }}
       {...props}
     >
-      <p>{children}</p>
+      <div>{children}</div>
     </Modal>
   );
 }

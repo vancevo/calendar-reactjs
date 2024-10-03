@@ -2,7 +2,7 @@ import "./App.css";
 import "./index.css";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import React, { useEffect, useRef, useState } from "react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import {
@@ -13,7 +13,7 @@ import {
   EnumDateViewOption,
   maxHeightPopupSelection,
   initialEvents,
-  eventActionText,
+  EventActionText,
   initialHeaderToolbar,
 } from "./lib/constants";
 import { PopoverEvent } from "./components/Popover.component";
@@ -21,29 +21,29 @@ import { ViewMode } from "./components/ViewMode.component";
 import { getRandomColor, generatedId } from "./lib/utils";
 import { RangePickerDate } from "./components/RangePicker.component";
 import { Sidebar } from "./components/Sidebar.component";
-
-function renderEventContent(eventInfo) {
-  return (
-    <div className={`flex gap-2 ${eventInfo.event.backgroundColor}`}>
-      <i>{eventInfo.event.title}</i>
-    </div>
-  );
-}
+import { useCalendarContext } from "./CalendarContext";
+import { goCalendarAPI } from "./lib/calendarConstant";
 
 function App() {
-  const calendarRef = useRef(null);
-  const dateRef = useRef({});
+  const { calendarRef, dateRef, isDraggableInitialized } = useCalendarContext();
   const [events, setEvents] = useState(initialEvents);
-  const [currentEvents, setCurrentEvents] = useState([]);
-
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+  const [test, setTest] = useState(null);
 
   const handleDateSelect = (selectInfo) => {
+    const views = Object.values(CalendarViewOption).filter(
+      (view) => view !== CalendarViewOption["month"]
+    );
+    const currentView = goCalendarAPI({ calendarRef }).view();
+
+    if (!views.includes(currentView)) {
+      return;
+    }
+
     dateRef.current.start = selectInfo.startStr;
     dateRef.current.end = selectInfo.endStr;
     const { jsEvent } = selectInfo;
-
     setPopupPosition({
       top: `${jsEvent.clientY - maxHeightPopupSelection}px`,
       left: `${jsEvent.clientX - maxHeightPopupSelection}px`,
@@ -57,7 +57,6 @@ function App() {
 
   const generatedEvent = () => {
     const title = prompt("Enter task title");
-    const calendarApi = calendarRef.current.getApi();
     const startTime = dateRef.current.start;
     const endTime = dateRef.current.end;
     if (title && startTime && endTime) {
@@ -69,8 +68,7 @@ function App() {
         bgColor: getRandomColor(),
         allDay: false,
       };
-      calendarApi.addEvent(newEvent);
-      setEvents([...events, newEvent]);
+      setEvents((prev) => [...prev, newEvent]);
     }
   };
   const handleEventPopover = (type) => {
@@ -85,33 +83,49 @@ function App() {
   };
 
   function handleEventClick(clickInfo) {
-    // if (
-    //   confirm(
-    //     `Are you sure you want to delete the event '${clickInfo.event.title}'`
-    //   )
-    // ) {
-    //   clickInfo.event.remove();
-    // }
+    if (
+      window.confirm(
+        `Are you sure you want to delete the event '${clickInfo.event.title}'`
+      )
+    ) {
+      clickInfo.event.remove();
+    }
   }
 
-  function handleEvents(events) {
-    setCurrentEvents(events);
-  }
+  useEffect(() => {
+    console.log(test);
+  }, [test]);
+
+  useEffect(() => {
+    const containerEl = document.querySelector("#external-events");
+    if (!isDraggableInitialized.current && containerEl) {
+      new Draggable(containerEl, {
+        itemSelector: ".event-items",
+        eventData: (ev) => {
+          setTest({ ev });
+          return {
+            title: ev.innerText,
+          };
+        },
+      });
+    }
+    // Mark as initialized
+    isDraggableInitialized.current = true;
+
+    return () => {
+      if (isDraggableInitialized.current) {
+        isDraggableInitialized.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div className="demo-app">
-      <div className="demo-app-main max-w-[1120px] my-[40px] mx-[20%]">
+      <div className="demo-app-main max-w-[1120px] my-[40px] lg:ml-[25%] xl:ml-[20%]">
         {/* HEADER */}
         <div className="flex justify-between">
-          <ViewMode
-            defaultValue={EnumDateViewOption.week}
-            calendarRef={calendarRef}
-          />
-          <RangePickerDate
-            calendarRef={calendarRef}
-            start={startWeek}
-            end={endWeek}
-          />
+          <ViewMode defaultValue={EnumDateViewOption.week} />
+          <RangePickerDate start={startWeek} end={endWeek} />
         </div>
         {/* GRID CALENDAR */}
         <FullCalendar
@@ -121,9 +135,7 @@ function App() {
           initialView={CalendarViewOption.week}
           initialEvents={events}
           select={handleDateSelect}
-          eventContent={renderEventContent}
           eventClick={handleEventClick}
-          eventsSet={handleEvents}
           editable
           selectable
           dayMaxEvents
@@ -132,7 +144,7 @@ function App() {
           droppable
         />
       </div>
-      <Sidebar events={events} />
+      <Sidebar />
       <PopoverEvent
         visible={popupVisible}
         onCancel={handlePopupClose}
@@ -143,7 +155,7 @@ function App() {
         footer={null}
       >
         <div>
-          {Object.entries(eventActionText).map(([key, value]) => (
+          {Object.entries(EventActionText).map(([key, value]) => (
             <p
               key={key}
               id={key}
