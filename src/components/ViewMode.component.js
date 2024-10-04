@@ -23,7 +23,7 @@ export function ViewMode({ children, defaultValue, ...props }) {
       <Select
         onChange={handleChange}
         options={DatedOptions}
-        className="w-[120px] h-[40px]"
+        className="w-[80px] h-[32px]"
         defaultValue={defaultValue.toLocaleLowerCase()}
         {...props}
       />

@@ -66,28 +66,63 @@ export function RangePickerDate({ start, end, ...props }) {
   useEffect(() => {
     renderTitleDatePicker({ calendarRef });
   }, []);
- 
+
   return (
     <>
       <div className="flex">
         <div
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-400 cursor-pointer border-r-[1px]"
+          className="rounded-l-md text-[#555B64] py-4 border-[#ddd] shadow w-[32px] h-[31px] flex items-center justify-center font-bold hover:bg-[rgba(0, 0, 0, 0.03)] cursor-pointer border-[0px]"
           onClick={() => handleNavigation({ direction: "prev" })}
         >
-          {"<"}
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14.5 5.5L8 12L14.5 18.5"
+              stroke="#4D5054"
+              stroke-width="1.3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
         </div>
-        <div className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-400 cursor-pointer border-r-[1px]">
-          {"<<"}
+        <div className="text-[#555B64] py-4 border-[#ddd] shadow w-[32px] h-[31px] flex items-center justify-center font-bold hover:opacity-70 cursor-pointer border-[0px]">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.5 5.5L5 12L11.5 18.5"
+              stroke="#4D5054"
+              stroke-width="1.3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+            <path
+              d="M17.5 5.5L11 12L17.5 18.5"
+              stroke="#4D5054"
+              stroke-width="1.3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
         </div>
         <div
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-500 cursor-pointer"
+          className="text-[#555B64] shadow px-[3px] h-[32px] w-[46px] cursor-pointer text-[13px] flex justify-center items-center border-[0px]"
           onClick={() => handleNavigation({ direction: "today" })}
         >
           Today
         </div>
         <RangePicker
           format={"DD/MM/YYYY"}
-          className="flex items-center justify-center rounded-none w-[200px]"
+          className="text-[#555B64] flex items-center justify-center rounded-none w-[138px] h-[32px] shadow py-[0px] px-1 border-[0px]"
           defaultValue={[start, end]}
           value={rangedTime}
           open={isOpen}
@@ -95,14 +130,49 @@ export function RangePickerDate({ start, end, ...props }) {
           onClick={() => setIsOpen(true)}
           onOpenChange={() => setIsOpen((prev) => !prev)}
         />
-        <div className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-400 cursor-pointer border-r-[1px]">
-          {">>"}
+        <div className="text-[#555B64] py-4 border-[#ddd] shadow w-[32px] h-[31px] flex items-center justify-center font-bold hover:opacity-70 cursor-pointer border-[0px]">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12.5 5.5L19 12L12.5 18.5"
+              stroke="#4D5054"
+              stroke-width="1.3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+            <path
+              d="M6.5 5.5L13 12L6.5 18.5"
+              stroke="#4D5054"
+              stroke-width="1.3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
         </div>
         <div
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-500 cursor-pointer"
+          className="rounded-r-md text-[#555B64] py-4 border-[#ddd] shadow w-[32px] h-[31px] flex items-center justify-center font-bold hover:opacity-70 cursor-pointer border-[0px]"
           onClick={() => handleNavigation({ direction: "next" })}
         >
-          {">"}
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.5 5.5L16 12L9.5 18.5"
+              stroke="#4D5054"
+              stroke-width="1.3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
         </div>
       </div>
     </>

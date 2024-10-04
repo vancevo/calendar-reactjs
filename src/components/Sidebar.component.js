@@ -20,7 +20,7 @@ export function Sidebar() {
   };
   return (
     <>
-      <div className="absolute left-[1%] top-[10%] bg-neutral-200 w-[250px] h-[80vh] overflow-y-scroll">
+      <div className="overflow-y-scroll">
         <div className="flex gap-1 justify-center items-center">
           <p className="text-center text-xl font-bold my-2">
             Task List 

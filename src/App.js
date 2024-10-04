@@ -28,8 +28,7 @@ import {
 } from "./lib/calendarConstant";
 
 function App() {
-  const { calendarRef, dateRef, isDraggableInitialized } =
-    useCalendarContext();
+  const { calendarRef, dateRef, isDraggableInitialized } = useCalendarContext();
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
@@ -108,7 +107,7 @@ function App() {
         itemSelector: ".event-items",
         eventData: (ev) => {
           return {
-            backgroundColor: ev.getAttribute('data-color'),
+            backgroundColor: ev.getAttribute("data-color"),
             title: ev.innerText,
           };
         },
@@ -125,32 +124,37 @@ function App() {
   }, []);
 
   return (
-    <div className="demo-app">
-      <div className="demo-app-main max-w-[1120px] my-[40px] lg:ml-[25%] xl:ml-[20%]">
+    <div className="demo-app grid grid-cols-[1600px,auto]">
+      <div className="demo-app-main my-[40px] ml-4">
         {/* HEADER */}
         <div className="flex justify-between">
           <ViewMode defaultValue={EnumDateViewOption.week} />
           <RangePickerDate start={startWeek} end={endWeek} />
         </div>
         {/* GRID CALENDAR */}
-        <FullCalendar
-          ref={calendarRef}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          headerToolbar={initialHeaderToolbar}
-          initialView={CalendarViewOption.week}
-          initialEvents={initialEvents}
-          select={handleDateSelect}
-          eventClick={handleEventClick}
-          allDaySlot={false}
-          eventContent={renderEventContent}
-          drop={(info) => info.draggedEl.parentNode?.removeChild(info.draggedEl)}
-          editable
-          selectable
-          dayMaxEvents
-          slotEventOverlap
-          nowIndicator
-          droppable
-        />
+        <div className="shadow">
+          <FullCalendar
+            ref={calendarRef}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            headerToolbar={initialHeaderToolbar}
+            initialView={CalendarViewOption.week}
+            initialEvents={initialEvents}
+            select={handleDateSelect}
+            eventClick={handleEventClick}
+            allDaySlot={false}
+            eventContent={renderEventContent}
+            drop={(info) =>
+              info.draggedEl.parentNode?.removeChild(info.draggedEl)
+            }
+            className="max-w-[1600px]"
+            editable
+            selectable
+            dayMaxEvents
+            slotEventOverlap
+            nowIndicator
+            droppable
+          />
+        </div>
       </div>
       <Sidebar />
       <PopoverEvent
