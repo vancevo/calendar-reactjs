@@ -47,6 +47,7 @@ export const EventActionText = {
   addTimeoff: "Add Time Off",
   newjob: "New Job",
 };
+
 export const maxWidthPopupSelection = 200;
 export const maxHeightPopupSelection =
   110 + 20 * Object.keys(EventActionText).length; // 20 is height for each items

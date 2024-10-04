@@ -10,6 +10,7 @@ export const goCalendarAPI = ({
   }
   const calendar = calendarRef?.current.getApi();
   return {
+    viewTitle: () => calendar.currentData.viewTitle,
     view: () => calendar.view.type,
     changeView: () => calendar.changeView(viewOption),
     next: () => calendar.next(),
@@ -37,4 +38,10 @@ export const renderEventContent = (eventInfo) => {
       <p>{eventInfo.event.title}</p>
     </div>
   );
+};
+
+export const renderTitleDatePicker = ({ calendarRef }) => {
+  const titleOfRangeTime = goCalendarAPI({ calendarRef }).viewTitle();
+  const input = document.querySelector(".ant-picker");
+  input.innerText = titleOfRangeTime;
 };

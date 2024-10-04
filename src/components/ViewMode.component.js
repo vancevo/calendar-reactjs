@@ -1,8 +1,7 @@
 import { Select } from "antd";
 import { CalendarViewOption, DatedOptions } from "../lib/constants";
 import { useCalendarContext } from "../CalendarContext";
-import { goCalendarAPI } from "../lib/calendarConstant";
-import { useEffect } from "react";
+import { goCalendarAPI, renderTitleDatePicker } from "../lib/calendarConstant";
 
 export function ViewMode({ children, defaultValue, ...props }) {
   const { calendarRef } = useCalendarContext();
@@ -16,6 +15,7 @@ export function ViewMode({ children, defaultValue, ...props }) {
       calendarRef,
       viewOption: CalendarViewOption[type],
     }).changeView();
+    renderTitleDatePicker({ calendarRef });
   };
 
   return (

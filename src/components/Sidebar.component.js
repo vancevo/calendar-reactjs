@@ -1,11 +1,9 @@
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { generatedId, getRandomColor } from "../lib/utils";
 
 export function Sidebar() {
   const [tasks, setTasks] = useState([]);
-
-  const totalTasks = useMemo(() => tasks.length, [tasks]);
 
   const addTask = () => {
     const title = prompt("Enter task title");
@@ -25,7 +23,7 @@ export function Sidebar() {
       <div className="absolute left-[1%] top-[10%] bg-neutral-200 w-[250px] h-[80vh] overflow-y-scroll">
         <div className="flex gap-1 justify-center items-center">
           <p className="text-center text-xl font-bold my-2">
-            Task List ({totalTasks})
+            Task List 
           </p>
           <div
             className="btn bg-yellow-300 w-10 h-8 flex items-center justify-center rounded-lg border-[1px] border-neutral-500 cursor-pointer hover:opacity-70"
@@ -38,14 +36,16 @@ export function Sidebar() {
           {tasks?.map(({ id, title, time, bgColor }) => (
             <div
               key={id}
-              className={`w-[200px] min-h-20 border-l-500 border-l-[4px] border-neutral-500 ml-2 shadow p-2  event-items`}
-              style={{
-                backgroundColor: bgColor,
-              }}
+              className={`w-[200px] min-h-20 border-l-500 border-l-[4px] border-neutral-500 ml-2 shadow p-2 event-items`}
+              data-id={id}
+              data-color={bgColor}
               draggable
+              style={{
+                background: bgColor,
+              }}
             >
               <p className="font-bold">{time}</p>
-              <p className="event-items">{title}</p>
+              <p>{title}</p>
             </div>
           ))}
         </div>

@@ -28,7 +28,8 @@ import {
 } from "./lib/calendarConstant";
 
 function App() {
-  const { calendarRef, dateRef, isDraggableInitialized } = useCalendarContext();
+  const { calendarRef, dateRef, isDraggableInitialized } =
+    useCalendarContext();
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
@@ -54,10 +55,6 @@ function App() {
     },
     [calendarRef, dateRef]
   );
-
-  const handlePopupClose = useCallback(() => {
-    setPopupVisible(false);
-  }, []);
 
   const generatedEvent = useCallback(() => {
     const title = prompt("Enter task title");
@@ -90,6 +87,10 @@ function App() {
     [generatedEvent]
   );
 
+  const handlePopupClose = () => {
+    setPopupVisible(false);
+  };
+
   const handleEventClick = useCallback((clickInfo) => {
     if (
       window.confirm(
@@ -107,6 +108,7 @@ function App() {
         itemSelector: ".event-items",
         eventData: (ev) => {
           return {
+            backgroundColor: ev.getAttribute('data-color'),
             title: ev.innerText,
           };
         },
@@ -141,6 +143,7 @@ function App() {
           eventClick={handleEventClick}
           allDaySlot={false}
           eventContent={renderEventContent}
+          drop={(info) => info.draggedEl.parentNode?.removeChild(info.draggedEl)}
           editable
           selectable
           dayMaxEvents

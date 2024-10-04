@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 import { DatePicker } from "antd";
 import { useCalendarContext } from "../CalendarContext";
-import { goCalendarAPI } from "../lib/calendarConstant";
-import {  useState, useCallback } from "react";
+import { goCalendarAPI, renderTitleDatePicker } from "../lib/calendarConstant";
+import { useState, useCallback, useEffect } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -40,50 +40,67 @@ export function RangePickerDate({ start, end, ...props }) {
         const [newStart, newEnd] = generatedEndDateByView({ start, view });
         setRangedTime([newStart, newEnd]);
         goCalendarAPI({ calendarRef, startTime: newStart }).goto();
+        renderTitleDatePicker({ calendarRef });
         setIsOpen(false);
       }
     },
     [generatedEndDateByView, calendarRef]
   );
 
-  const goNext = useCallback(() => {
-    goCalendarAPI({ calendarRef }).next();
-  }, []);
-  const goPrevious = useCallback(() => {
-    goCalendarAPI({ calendarRef }).prev();
-  }, []);
-  const goToday = useCallback(() => {
-    goCalendarAPI({ calendarRef }).today();
-  }, []);
+  const handleNavigation = useCallback(
+    ({ direction }) => {
+      const actions = {
+        next: goCalendarAPI({ calendarRef }).next,
+        prev: goCalendarAPI({ calendarRef }).prev,
+        today: goCalendarAPI({ calendarRef }).today,
+      };
+      actions[direction]();
+      renderTitleDatePicker({ calendarRef });
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    },
+    [isOpen]
+  );
 
+  useEffect(() => {
+    renderTitleDatePicker({ calendarRef });
+  }, []);
+ 
   return (
     <>
       <div className="flex">
         <div
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-400 cursor-pointer border-r-[1px]"
-          onClick={goPrevious}
+          onClick={() => handleNavigation({ direction: "prev" })}
         >
           {"<"}
         </div>
+        <div className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-400 cursor-pointer border-r-[1px]">
+          {"<<"}
+        </div>
         <div
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-500 cursor-pointer"
-          onClick={goToday}
+          onClick={() => handleNavigation({ direction: "today" })}
         >
           Today
         </div>
-
         <RangePicker
           format={"DD/MM/YYYY"}
-          className="rounded-none"
+          className="flex items-center justify-center rounded-none w-[200px]"
           defaultValue={[start, end]}
           value={rangedTime}
           open={isOpen}
           onCalendarChange={handleRangeChange}
           onClick={() => setIsOpen(true)}
+          onOpenChange={() => setIsOpen((prev) => !prev)}
         />
+        <div className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-400 cursor-pointer border-r-[1px]">
+          {">>"}
+        </div>
         <div
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border-neutral-500 cursor-pointer"
-          onClick={goNext}
+          onClick={() => handleNavigation({ direction: "next" })}
         >
           {">"}
         </div>
