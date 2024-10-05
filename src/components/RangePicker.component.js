@@ -69,9 +69,9 @@ export function RangePickerDate({ start, end, ...props }) {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex shadow bg-white rounded-lg">
         <div
-          className="rounded-l-md text-[#555B64] py-4 border-[#ddd] shadow w-[32px] h-[31px] flex items-center justify-center font-bold hover:bg-[rgba(0, 0, 0, 0.03)] cursor-pointer border-[0px]"
+          className="bg-white rounded-l-md text-[#555B64] py-4 border-[#ddd] w-[32px] h-[31px] flex items-center justify-center font-bold hover:bg-[rgba(0, 0, 0, 0.03)] cursor-pointer border-r-[1px]"
           onClick={() => handleNavigation({ direction: "prev" })}
         >
           <svg
@@ -90,7 +90,7 @@ export function RangePickerDate({ start, end, ...props }) {
             ></path>
           </svg>
         </div>
-        <div className="text-[#555B64] py-4 border-[#ddd] shadow w-[32px] h-[31px] flex items-center justify-center font-bold hover:opacity-70 cursor-pointer border-[0px]">
+        <div className="bg-white text-[#555B64] py-4 border-[#ddd] w-[32px] h-[31px] flex items-center justify-center font-bold hover:opacity-70 cursor-pointer border-r-[1px]">
           <svg
             width="24"
             height="24"
@@ -115,14 +115,14 @@ export function RangePickerDate({ start, end, ...props }) {
           </svg>
         </div>
         <div
-          className="text-[#555B64] shadow px-[3px] h-[32px] w-[46px] cursor-pointer text-[13px] flex justify-center items-center border-[0px]"
+          className="bg-white text-[#555B64] px-[3px] h-[31px] w-[46px] cursor-pointer text-[13px] flex justify-center items-center border-r-[1px]"
           onClick={() => handleNavigation({ direction: "today" })}
         >
           Today
         </div>
         <RangePicker
           format={"DD/MM/YYYY"}
-          className="text-[#555B64] flex items-center justify-center rounded-none w-[138px] h-[32px] shadow py-[0px] px-1 border-[0px]"
+          className="bg-white text-[#555B64] flex items-center justify-center rounded-none w-[150px] h-[31px] py-[0px] px-1 border-[0px]"
           defaultValue={[start, end]}
           value={rangedTime}
           open={isOpen}
@@ -130,7 +130,7 @@ export function RangePickerDate({ start, end, ...props }) {
           onClick={() => setIsOpen(true)}
           onOpenChange={() => setIsOpen((prev) => !prev)}
         />
-        <div className="text-[#555B64] py-4 border-[#ddd] shadow w-[32px] h-[31px] flex items-center justify-center font-bold hover:opacity-70 cursor-pointer border-[0px]">
+        <div className="bg-white text-[#555B64] py-4 border-[#ddd] w-[32px] h-[31px] flex items-center justify-center font-bold hover:opacity-70 cursor-pointer border-l-[1px]">
           <svg
             width="24"
             height="24"
@@ -155,7 +155,7 @@ export function RangePickerDate({ start, end, ...props }) {
           </svg>
         </div>
         <div
-          className="rounded-r-md text-[#555B64] py-4 border-[#ddd] shadow w-[32px] h-[31px] flex items-center justify-center font-bold hover:opacity-70 cursor-pointer border-[0px]"
+          className="bg-white rounded-r-md text-[#555B64] py-4 border-[#ddd] w-[32px] h-[31px] flex items-center justify-center font-bold hover:opacity-70 cursor-pointer border-l-[1px]"
           onClick={() => handleNavigation({ direction: "next" })}
         >
           <svg

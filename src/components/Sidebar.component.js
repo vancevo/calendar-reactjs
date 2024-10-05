@@ -20,7 +20,7 @@ export function Sidebar() {
   };
   return (
     <>
-      <div className="overflow-y-scroll">
+      <div className="overflow-y-scroll mt-10">
         <div className="flex gap-1 justify-center items-center">
           <p className="text-center text-xl font-bold my-2">
             Task List 
@@ -32,7 +32,7 @@ export function Sidebar() {
             +
           </div>
         </div>
-        <div className="flex flex-col gap-2" id="external-events">
+        <div className="flex flex-col items-center gap-2" id="external-events">
           {tasks?.map(({ id, title, time, bgColor }) => (
             <div
               key={id}

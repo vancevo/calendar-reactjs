@@ -8,7 +8,7 @@
 }
 
 html {
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   font-size: 13px;
 }
 
@@ -71,4 +71,16 @@ th.fc-col-header-cell:nth-child(7) {
 }
 th.fc-col-header-cell:nth-child(8) {
   border-bottom: 2px solid rgb(235, 221, 33);
+}
+
+.fc-header-toolbar,
+.fc-toolbar {
+  display: none !important;
+}
+
+.fc-view,
+.fc-view-harness {
+  padding: 12px;
+  background-color: white;
+  border-radius: 12px;
 }

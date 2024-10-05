@@ -124,7 +124,7 @@ function App() {
   }, []);
 
   return (
-    <div className="demo-app grid grid-cols-[1600px,auto]">
+    <div className="demo-app grid grid-cols-[1400px,1fr] shadow">
       <div className="demo-app-main my-[40px] ml-4">
         {/* HEADER */}
         <div className="flex justify-between">
@@ -132,7 +132,7 @@ function App() {
           <RangePickerDate start={startWeek} end={endWeek} />
         </div>
         {/* GRID CALENDAR */}
-        <div className="shadow">
+        <div className="shadow rounded-lg bg-white mt-3">
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
